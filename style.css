@@ -1,0 +1,21 @@
+.meal-name, .meal-time {
+    margin-bottom: 5px; /* Adjust spacing below meal names and times */
+}
+
+.meal-item {
+    margin-bottom: 20px; /* Space between each meal's items */
+    padding-bottom: 20px; /* Space at the bottom of each meal's items */
+    border-bottom: 1px solid #ccc; /* Visually separate each meal's items */
+}
+
+.menu-section {
+    margin-top: 10px; /* Space before each new section like Grill Station, Salad Bar, etc. */
+}
+body {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    height: 100vh; /* Make the body take up the full viewport height */
+    margin: 0; /* Remove default margin */
+}

@@ -1,41 +1,39 @@
 from flask import Flask, jsonify
+from flask_cors import CORS  # Ensure CORS is handled for cross-origin AJAX requests
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 import datetime
 
 app = Flask(__name__)
+CORS(app)  # Apply CORS to the Flask app
 
 def scrape_menu_for_today():
-    # Determine the current day
     current_day = datetime.datetime.now().strftime("%A")
-    
-    # URL of the menu page
     url = "https://www.oxy.edu/student-life/campus-dining/where-eat/marketplace"
     response = requests.get(url)
+
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Assuming each day's menu is clearly identified, e.g., by a heading containing the day's name
-        # This is a simplified example; you might need to adjust the logic based on the actual page structure
-        day_section = soup.find(lambda tag: tag.name == "h2" and current_day in tag.text)
-        if day_section:
-            menu_items = []
-            for sibling in day_section.find_next_siblings():
-                # Assuming menu items for a day are contained within <p> tags following the day's heading
-                # Adjust this logic as needed based on the actual HTML structure
-                if sibling.name == "h2":  # Stop if we reach the heading of the next day
+        current_day_anchor = soup.find('a', {'name': current_day})
+
+        if current_day_anchor:
+            found_current_day = False
+            menu_items = []  # Store menu items here
+            for sibling in current_day_anchor.find_all_next():
+                if found_current_day and sibling.name == 'u' and sibling.find('strong'):
                     break
-                if sibling.name == "p":
-                    menu_items.append(sibling.text.strip())
-            
-            # Structure the scraped data
-            menu_data = {
-                "day": current_day,
-                "items": menu_items
-            }
-            return menu_data
+
+                if sibling.name == 'p':
+                    found_current_day = True
+                    item_text = ' '.join(sibling.stripped_strings)  # Combine text from strings and children
+                    menu_items.append(item_text)
+
+            if menu_items:  # Check if we've found any items
+                return {"day": current_day, "items": menu_items}
+            else:
+                return {"error": f"No menu information found for {current_day}."}
         else:
-            return {"error": f"No menu information found for {current_day}."}
+            return {"error": f"No anchor tag found for {current_day}."}
     else:
         return {"error": "Failed to retrieve the webpage."}
 
