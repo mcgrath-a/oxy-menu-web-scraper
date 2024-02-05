@@ -7,8 +7,9 @@
     margin-bottom: 20px; /* Space between each meal's items */
     padding-bottom: 20px; /* Space at the bottom of each meal's items */
     border-bottom: 1px solid #ccc; /* Visually separate each meal's items */
-    /* font-size: large; */
+     font-size:x-large; 
     color: blue;
+
     
     
 }
