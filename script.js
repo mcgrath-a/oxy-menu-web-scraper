@@ -1,38 +1,43 @@
 document.addEventListener("DOMContentLoaded", function () {
   fetch("http://127.0.0.1:5000/menu")
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       const menuDiv = document.getElementById("menu");
       if (data.day && Array.isArray(data.items)) {
-        menuDiv.innerHTML = `<h2>Menu for ${data.day}</h2>`;
+        menuDiv.innerHTML = `<h1>Menu for ${data.day}, ${data.date}</h1>
+        `;
         data.items.forEach((item) => {
-          if (!item.match(/\b\d{4}\b/)) { // Exclude lines with a year (e.g., "2024")
+          if (!item.match(/\b\d{4}\b/)) {
+            // Exclude lines with a year (e.g., "2024")
             // Format meal names and times, ensuring they're on separate lines
-            item = item.replace(/(Breakfast|Lunch|Dinner)(\s+\d{1,2}:\d{2}[ap]m\s+-\s+\d{1,2}:\d{2}[ap]m)/, '<div class="meal-name"><strong>$1</strong></div><div class="meal-time">$2</div>');
+            item = item.replace(
+              /(Breakfast|Lunch|Dinner)(\s+\d{1,2}:\d{2}[ap]m\s+-\s+\d{1,2}:\d{2}[ap]m)/,
+              '<div class="meal-name"><strong>$1</strong></div><div class="meal-time">$2</div>'
+            );
 
             // Add breaks before keywords for readability, maintaining semantic structure
-            item = item.replace(/(Grill Station|Salad Bar|Soup|Sauté Station|Chef's Corner|Sandwich Station)/g, '<div class="menu-section">$1');
+            item = item.replace(
+              /(Grill Station|Salad Bar|Soup|Sauté Station|Chef's Corner|Sandwich Station| Specialty Salad - )/g,
+              '<div class="menu-section">$1'
+            );
 
             // Closing div for menu-section
-            item = item + '</div>';
+            item = item + "</div>";
 
             menuDiv.innerHTML += `<div class="meal-item">${item}</div>`;
           }
         });
       } else {
-        menuDiv.innerHTML = "Error loading menu or no menu available for today.";
+        menuDiv.innerHTML =
+          "Error loading menu or no menu available for today.";
         console.error("Unexpected data structure:", data);
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Error fetching menu:", error);
       document.getElementById("menu").innerHTML = "Error fetching menu.";
     });
 });
-
-
-
-
 
 /* document.addEventListener("DOMContentLoaded", function () {
   fetch("http://127.0.0.1:5000/menu")

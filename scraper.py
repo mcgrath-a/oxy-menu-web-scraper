@@ -8,7 +8,10 @@ app = Flask(__name__)
 CORS(app)  # Apply CORS to the Flask app
 
 def scrape_menu_for_today():
-    current_day = datetime.datetime.now().strftime("%A")
+    current_date = datetime.datetime.now()
+    current_day = current_date.strftime("%A")
+    formatted_date = current_date.strftime("%B %d, %Y")  # Format as "Month Day, Year"
+
     url = "https://www.oxy.edu/student-life/campus-dining/where-eat/marketplace"
     response = requests.get(url)
 
@@ -29,7 +32,7 @@ def scrape_menu_for_today():
                     menu_items.append(item_text)
 
             if menu_items:  # Check if we've found any items
-                return {"day": current_day, "items": menu_items}
+                 return {"day": current_day, "date": formatted_date, "items": menu_items}
             else:
                 return {"error": f"No menu information found for {current_day}."}
         else:
