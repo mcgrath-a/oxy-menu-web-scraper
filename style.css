@@ -8,8 +8,19 @@
     padding-bottom: 20px; /* Space at the bottom of each meal's items */
     border-bottom: 1px solid #ccc; /* Visually separate each meal's items */
     /* font-size: large; */
+    color: blue;
+    
     
 }
+/* Center text lines vertically and horizontally */
+.text-center {
+    text-align: center; /* Center text horizontally */
+    display: flex;
+    align-items: center; /* Center text vertically */
+    justify-content: center; /* Center text horizontally */
+    height: 100vh; /* Adjust as needed */
+}
+
 
 .menu-section {
     margin-top: 10px; /* Space before each new section like Grill Station, Salad Bar, etc. */
@@ -21,4 +32,10 @@ body {
     align-items: center; /* Center items vertically */
     height: 100vh; /* Make the body take up the full viewport height */
     margin: 0; /* Remove default margin */
+}
+
+/* Add margins and make page scrollable */
+.page-container {
+    margin: 20px; /* Adjust the margin size as needed */
+    overflow: auto; /* Enable vertical scrolling when content overflows */
 }
